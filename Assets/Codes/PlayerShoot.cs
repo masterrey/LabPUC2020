@@ -14,6 +14,8 @@ public class PlayerShoot : MonoBehaviour
         float movx = Input.GetAxis("Mouse Y");
         transform.Rotate(new Vector3(-movx, 0, 0));
 
+        //inputs de teclado
+
         if (Input.GetKey(KeyCode.Alpha1)) indexWeapon = 0;
         if (Input.GetKey(KeyCode.Alpha2)) indexWeapon = 1;
         if (Input.GetKey(KeyCode.Alpha3)) indexWeapon = 2;
@@ -28,7 +30,7 @@ public class PlayerShoot : MonoBehaviour
             //instancia o objeto e guarda a referencia
             GameObject myprojectile=
             Instantiate(projectilesPrefab[indexWeapon], transform.position+transform.forward,
-            Quaternion.identity);
+            transform.rotation);
 
             if (myprojectile.GetComponent<guidedBomb>())
             {
@@ -45,7 +47,7 @@ public class PlayerShoot : MonoBehaviour
         {
             laserpoint.transform.position = hit.point;
         }
-
+        
     }
 
 

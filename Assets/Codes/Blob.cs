@@ -20,7 +20,7 @@ public class Blob : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print("bati");
+        if(!collision.gameObject.CompareTag("Player"))
         rdb.isKinematic = true;
     }
 }
