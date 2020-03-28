@@ -6,7 +6,6 @@ public class PlayerShoot : MonoBehaviour
 {
     public GameObject[] projectilesPrefab;
     int indexWeapon;
-    public GameObject target;
     public GameObject laserpoint;
     void Update()
     {
@@ -46,6 +45,10 @@ public class PlayerShoot : MonoBehaviour
         if(Physics.Raycast(transform.position,transform.forward,out RaycastHit hit))
         {
             laserpoint.transform.position = hit.point;
+        }
+        else
+        {
+            laserpoint.transform.position = transform.position + transform.forward * 1000;
         }
         
     }

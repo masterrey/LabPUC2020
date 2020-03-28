@@ -5,9 +5,9 @@ using UnityEngine;
 public class guidedBomb : MonoBehaviour
 {
     public GameObject target;
-
     Rigidbody rdb;
     public float bombForce = 1000;
+    public GameObject explosion;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,13 +16,12 @@ public class guidedBomb : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.LookAt(target.transform);
-        rdb.AddForce(transform.forward*50);
-
-        if (Vector3.Distance(transform.position, target.transform.position) < 1)
+        if (target)
         {
-            Explode();
+            transform.LookAt(target.transform);
+
         }
+        rdb.AddForce(transform.forward*50);
 
     }
     private void OnCollisionEnter(Collision collision)
@@ -35,6 +34,7 @@ public class guidedBomb : MonoBehaviour
         void Explode()
     {
         print("Boom!");
+        Instantiate(explosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
         RaycastHit[] hits;
         hits = Physics.SphereCastAll(transform.position, 5, Vector3.up, 10);
