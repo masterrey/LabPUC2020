@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public float bombForce=1000;
+    public GameObject explosionPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +14,9 @@ public class Bomb : MonoBehaviour
     }
     void Explode()
     {
+
+       GameObject explo= Instantiate(explosionPrefab, transform.position, transform.rotation);
+        Destroy(explo, 4);
        //Destroi o objeto
         Destroy(gameObject);
         //array de raycasts
