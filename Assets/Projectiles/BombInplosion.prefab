@@ -123,3 +123,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombForce: -2000
+  explosionPrefab: {fileID: 6191386081424470077, guid: e827bcea6d0db354e9ba4c5f7cfb5a38,
+    type: 3}

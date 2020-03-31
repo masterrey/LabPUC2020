@@ -37,7 +37,7 @@ public class PlayerShoot : MonoBehaviour
             }
 
             //adiciona uma forca no objeto
-            myprojectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
+            myprojectile.GetComponent<Rigidbody>().AddForce(transform.forward * 500);
 
 
         }
