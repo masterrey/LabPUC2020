@@ -33,8 +33,8 @@ public class guidedBomb : MonoBehaviour
 
         void Explode()
     {
-        print("Boom!");
-        Instantiate(explosion, transform.position, Quaternion.identity);
+        GameObject explo = Instantiate(explosion, transform.position, transform.rotation);
+        Destroy(explo, 4);
         Destroy(gameObject);
         RaycastHit[] hits;
         hits = Physics.SphereCastAll(transform.position, 5, Vector3.up, 10);
@@ -44,7 +44,11 @@ public class guidedBomb : MonoBehaviour
             foreach (RaycastHit hit in hits)
             {
                 if (hit.rigidbody)
+                {
+                    hit.rigidbody.isKinematic = false;
                     hit.rigidbody.AddExplosionForce(bombForce, transform.position, 10);
+                    hit.collider.gameObject.SendMessage("GetDamage", SendMessageOptions.DontRequireReceiver);
+                }
             }
         }
     }
