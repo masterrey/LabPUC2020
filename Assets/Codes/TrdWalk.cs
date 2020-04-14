@@ -18,10 +18,16 @@ public class TrdWalk : MonoBehaviour
     public Vector3 move { get; private set; }
     public float movforce=100;
 
+    Vector3 direction;
+
+    GameObject referenceObject;
+
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(Idle());
+
+        referenceObject=Camera.main.GetComponent<trdCam>().GetRefereceObject();
     }
 
     // Update is called once per frame
@@ -29,7 +35,18 @@ public class TrdWalk : MonoBehaviour
     {
         //criacao de vetor de movimento local
         move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        rdb.AddRelativeForce(move * movforce);
+        move = referenceObject.transform.TransformDirection(move);
+
+        //girar pra direcao das teclas
+        if (move.magnitude > 0)
+        {
+            direction = move;
+        }
+        transform.forward =Vector3.Lerp(transform.forward,direction,Time.fixedDeltaTime*20);
+
+       
+
+        rdb.AddForce(move * movforce);
     }
 
     IEnumerator Idle()
