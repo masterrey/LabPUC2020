@@ -45,8 +45,8 @@ public class TrdWalk : MonoBehaviour
         transform.forward =Vector3.Lerp(transform.forward,direction,Time.fixedDeltaTime*20);
 
        
-
-        rdb.AddForce(move * movforce);
+        //reduz a força de movimento de acordo com a velocidade pra ter muita força de saida mas pouca velocidade. 
+        rdb.AddForce(move * (movforce/(rdb.velocity.magnitude+1)));
     }
 
     IEnumerator Idle()
