@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ObjectDamage : MonoBehaviour
 {
+
+    public MeshRenderer render;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +20,19 @@ public class ObjectDamage : MonoBehaviour
 
     public void Damage()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        StartCoroutine(Blink());
     }
 
+    IEnumerator Blink()
+    {
+        int blinks = 6;
+        while (blinks > 0)
+        {
+            render.enabled = !render.enabled;
+            yield return new WaitForSeconds(0.1f);
+            blinks--;
+        }
+    }
 }
 
