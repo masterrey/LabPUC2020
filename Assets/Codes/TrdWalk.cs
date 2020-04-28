@@ -10,6 +10,7 @@ public class TrdWalk : MonoBehaviour
         walk,
         jump,
         die,
+        attack,
     }
     public States state;
     public Animator anim;
@@ -47,6 +48,15 @@ public class TrdWalk : MonoBehaviour
        
         //reduz a força de movimento de acordo com a velocidade pra ter muita força de saida mas pouca velocidade. 
         rdb.AddForce(move * (movforce/(rdb.velocity.magnitude+1)));
+
+       
+    }
+    private void Update()
+    {
+        if(Input.GetButtonDown("Fire1"))
+        {
+            StartCoroutine(Attack());
+        }
     }
 
     IEnumerator Idle()
@@ -91,5 +101,16 @@ public class TrdWalk : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         //saida do estado
+    }
+
+
+    IEnumerator Attack()
+    {
+        //equivalente ao Start 
+        state = States.attack;
+        anim.SetTrigger("Attack");
+        yield return new WaitForSeconds(.5f);
+        //saida do estado
+        StartCoroutine(Idle());
     }
 }
