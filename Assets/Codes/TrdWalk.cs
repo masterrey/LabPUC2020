@@ -51,6 +51,8 @@ public class TrdWalk : MonoBehaviour
         //reduz a força de movimento de acordo com a velocidade pra ter muita força de saida mas pouca velocidade. 
         rdb.AddForce(move * (movforce/(rdb.velocity.magnitude+1)));
 
+        Vector3 velocityWoY = new Vector3(rdb.velocity.x, 0, rdb.velocity.z);
+        rdb.AddForce(-velocityWoY * 500);
        
     }
     private void Update()
@@ -64,6 +66,8 @@ public class TrdWalk : MonoBehaviour
         {
             StartCoroutine(Jump());
         }
+
+
     }
 
     IEnumerator Idle()
@@ -126,13 +130,13 @@ public class TrdWalk : MonoBehaviour
     {
         //equivalente ao Start 
         state = States.jump;
-        rdb.AddForce(Vector3.up * 1000,ForceMode.Impulse);
+        rdb.AddForce(Vector3.up * 500,ForceMode.Impulse);
         //
         while (state == States.jump)
         {
             //equivalente ao update
           
-            if(Physics.Raycast(transform.position+ Vector3.up, Vector3.down,out RaycastHit hit))
+            if(Physics.Raycast(transform.position+ Vector3.up, Vector3.down,out RaycastHit hit, 65279))
             {
                 anim.SetFloat("GroundDistance", hit.distance);
                 print(hit.distance);

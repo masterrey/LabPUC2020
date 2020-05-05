@@ -15780,6 +15780,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 996520633, guid: 052ccbd9375e2cf4eb3d4c2d82e08191, type: 3}
+      propertyPath: m_Drag
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 996520634, guid: 052ccbd9375e2cf4eb3d4c2d82e08191, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -15787,6 +15791,10 @@ PrefabInstance:
     - target: {fileID: 996520634, guid: 052ccbd9375e2cf4eb3d4c2d82e08191, type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 996520635, guid: 052ccbd9375e2cf4eb3d4c2d82e08191, type: 3}
+      propertyPath: movforce
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 1009855119218150, guid: 052ccbd9375e2cf4eb3d4c2d82e08191, type: 3}
       propertyPath: m_Layer
