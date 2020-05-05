@@ -11049,6 +11049,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6669347924414150900, guid: 16b0f45b3f96e4246bbe835fcdb60e93,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16b0f45b3f96e4246bbe835fcdb60e93, type: 3}
 --- !u!1001 &1352247908
@@ -14746,6 +14751,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2951204802932117162, guid: 447d45df610135f40b32f7abb8f24645,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6532504384674689068, guid: 447d45df610135f40b32f7abb8f24645,
         type: 3}

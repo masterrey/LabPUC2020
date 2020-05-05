@@ -23,6 +23,8 @@ public class TrdWalk : MonoBehaviour
 
     GameObject referenceObject;
 
+    bool JumpPressed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +58,11 @@ public class TrdWalk : MonoBehaviour
         if(Input.GetButtonDown("Fire1"))
         {
             StartCoroutine(Attack());
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            StartCoroutine(Jump());
         }
     }
 
@@ -112,5 +119,37 @@ public class TrdWalk : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         //saida do estado
         StartCoroutine(Idle());
+    }
+
+
+    IEnumerator Jump()
+    {
+        //equivalente ao Start 
+        state = States.jump;
+        rdb.AddForce(Vector3.up * 1000,ForceMode.Impulse);
+        //
+        while (state == States.jump)
+        {
+            //equivalente ao update
+          
+            if(Physics.Raycast(transform.position+ Vector3.up, Vector3.down,out RaycastHit hit))
+            {
+                anim.SetFloat("GroundDistance", hit.distance);
+                print(hit.distance);
+                if (hit.distance < 0.2f && rdb.velocity.y<=0)
+                {
+                   StartCoroutine(Idle());
+                }
+                Debug.DrawLine(transform.position, hit.point);
+            }
+            else
+            {
+                anim.SetFloat("GroundDistance", 3);
+            }
+
+            //
+            yield return new WaitForEndOfFrame();
+        }
+        //saida do estado
     }
 }
