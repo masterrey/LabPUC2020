@@ -20,12 +20,16 @@ public class TrdWalk : MonoBehaviour
     public Vector3 move { get; private set; }
     public float movforce=100;
 
+    public bool ikActive = false;
+
     Vector3 direction;
 
     GameObject referenceObject;
 
     bool JumpPressed;
 
+    public GameObject objectToLook;
+    Vector3 lookposition;
     // Start is called before the first frame update
     void Start()
     {
@@ -140,12 +144,22 @@ public class TrdWalk : MonoBehaviour
         //equivalente ao Start 
         state = States.jump;
         jumptime = 0.5f;
-        //
+        //checa se esta no chao
+        if (Physics.Raycast(transform.position + Vector3.up * .5f, Vector3.down, out RaycastHit hit, 65279))
+        {
+            if(hit.distance > 0.6f)
+            {
+                StartCoroutine(Idle());
+            }
+        }
+        
         while (state == States.jump)
         {
             //equivalente ao update
+            //adiciona forca enquanto o tempo diminue
             rdb.AddForce(Vector3.up * jumpforce* jumptime);
             jumptime -= Time.fixedDeltaTime;
+            //se o tempo acabar o estado acaba
             if (jumptime < 0)
             {
                 StartCoroutine(Idle());
@@ -153,5 +167,33 @@ public class TrdWalk : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         //saida do estado
+    }
+
+
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        if (ikActive)
+        {
+            anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+            
+            if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out RaycastHit hit, 3, 65279))
+            {
+                if (hit.collider.CompareTag("Push"))
+                {
+                    anim.SetIKPosition(AvatarIKGoal.LeftHand, hit.point-transform.right*0.2f);
+                    anim.SetIKPosition(AvatarIKGoal.RightHand, hit.point + transform.right * 0.2f);
+                }
+            }
+        }
+
+        if (objectToLook)
+        {
+            anim.SetLookAtWeight(1);
+            lookposition = Vector3.Lerp(lookposition, objectToLook.transform.position, Time.deltaTime*10);
+            anim.SetLookAtPosition(lookposition+Vector3.up*.5f);
+        }
+        
     }
 }
