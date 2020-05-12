@@ -15,7 +15,8 @@ public class TrdWalk : MonoBehaviour
     public States state;
     public Animator anim;
     public Rigidbody rdb;
-
+    public float jumpforce=1000;
+    float jumptime = .5f;
     public Vector3 move { get; private set; }
     public float movforce=100;
 
@@ -53,11 +54,17 @@ public class TrdWalk : MonoBehaviour
 
         Vector3 velocityWoY = new Vector3(rdb.velocity.x, 0, rdb.velocity.z);
         rdb.AddForce(-velocityWoY * 500);
-       
+
+
+        if(Physics.Raycast(transform.position+ Vector3.up*.5f, Vector3.down,out RaycastHit hit, 65279))
+        {
+            anim.SetFloat("GroundDistance", hit.distance);
+        }
+
     }
     private void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {
             StartCoroutine(Attack());
         }
@@ -66,8 +73,10 @@ public class TrdWalk : MonoBehaviour
         {
             StartCoroutine(Jump());
         }
-
-
+        if (Input.GetButtonUp("Jump"))
+        {
+            jumptime = 0;
+        }
     }
 
     IEnumerator Idle()
@@ -130,29 +139,18 @@ public class TrdWalk : MonoBehaviour
     {
         //equivalente ao Start 
         state = States.jump;
-        rdb.AddForce(Vector3.up * 500,ForceMode.Impulse);
+        jumptime = 0.5f;
         //
         while (state == States.jump)
         {
             //equivalente ao update
-          
-            if(Physics.Raycast(transform.position+ Vector3.up, Vector3.down,out RaycastHit hit, 65279))
+            rdb.AddForce(Vector3.up * jumpforce* jumptime);
+            jumptime -= Time.fixedDeltaTime;
+            if (jumptime < 0)
             {
-                anim.SetFloat("GroundDistance", hit.distance);
-                print(hit.distance);
-                if (hit.distance < 0.2f && rdb.velocity.y<=0)
-                {
-                   StartCoroutine(Idle());
-                }
-                Debug.DrawLine(transform.position, hit.point);
-            }
-            else
-            {
-                anim.SetFloat("GroundDistance", 3);
-            }
-
-            //
-            yield return new WaitForEndOfFrame();
+                StartCoroutine(Idle());
+            }    
+            yield return new WaitForFixedUpdate();
         }
         //saida do estado
     }
