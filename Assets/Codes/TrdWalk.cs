@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class TrdWalk : MonoBehaviour
 {
     public enum States
@@ -36,6 +36,13 @@ public class TrdWalk : MonoBehaviour
         StartCoroutine(Idle());
 
         referenceObject=Camera.main.GetComponent<trdCam>().GetRefereceObject();
+        if (SceneManager.GetActiveScene().name == "MainScene")
+        {
+            if (CommomStatus.lastPosition.magnitude > 1)
+            {
+                transform.position = CommomStatus.lastPosition;
+            }
+        }
     }
 
     // Update is called once per frame

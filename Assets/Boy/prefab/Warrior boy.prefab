@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 996520635}
   m_Layer: 8
   m_Name: Warrior boy
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -646,7 +646,7 @@ GameObject:
   - component: {fileID: 162874639}
   m_Layer: 8
   m_Name: Bip01 Spine1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1699,3 +1699,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponOnHand: {fileID: 0}
   handposition: {fileID: 809308951}
+  myobjs:
+  - {fileID: 5061166457180286509, guid: 16b0f45b3f96e4246bbe835fcdb60e93, type: 3}
+  - {fileID: 6532504384674689068, guid: 447d45df610135f40b32f7abb8f24645, type: 3}

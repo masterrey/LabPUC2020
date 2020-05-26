@@ -18,12 +18,13 @@ public class DayCicle : MonoBehaviour
     //declaraçao das funcoes
     public MorningCall myMorningCall;
     public NightCall myNightCall;
-
+    public string timespan;
     bool day = false;
     void Start()
     {
         //guarda a cor do fog
         fogcolor = RenderSettings.fogColor;
+        daytime = CommomStatus.currenttime;
     }
 
     void Update()
@@ -33,8 +34,8 @@ public class DayCicle : MonoBehaviour
 
         //cria um timespan pra referencia da hora do dia
         mytime = TimeSpan.FromSeconds(daytime);
-        print(mytime.ToString());
-
+        timespan=mytime.ToString();
+        CommomStatus.currenttime = daytime;
         //coloca o sol no lugar apropriado para o dia regra de 3 86400segundo para um dia por 360 graus pra um dia
         lightdegrees = 360 * (daytime/ 86400);
         //aplica os graus na rotaçao da luz
