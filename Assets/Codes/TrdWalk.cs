@@ -11,6 +11,7 @@ public class TrdWalk : MonoBehaviour
         jump,
         die,
         attack,
+        fly,
     }
     public States state;
     public Animator anim;
@@ -30,6 +31,11 @@ public class TrdWalk : MonoBehaviour
 
     public GameObject objectToLook;
     Vector3 lookposition;
+
+    public GameObject wing;
+    public bool wingtryactivate = false;
+
+    public Transform handl, handr;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,19 +63,34 @@ public class TrdWalk : MonoBehaviour
         {
             direction = move;
         }
-        transform.forward =Vector3.Lerp(transform.forward,direction,Time.fixedDeltaTime*20);
-
        
-        //reduz a força de movimento de acordo com a velocidade pra ter muita força de saida mas pouca velocidade. 
-        rdb.AddForce(move * (movforce/(rdb.velocity.magnitude+1)));
 
-        Vector3 velocityWoY = new Vector3(rdb.velocity.x, 0, rdb.velocity.z);
-        rdb.AddForce(-velocityWoY * 500);
+        if (state != States.fly)
+        {
+            transform.forward = Vector3.Lerp(transform.forward, direction, Time.fixedDeltaTime * 20);
+            //reduz a força de movimento de acordo com a velocidade pra ter muita força de saida mas pouca velocidade. 
+            rdb.AddForce(move * (movforce / (rdb.velocity.magnitude + 1)));
 
+            Vector3 velocityWoY = new Vector3(rdb.velocity.x, 0, rdb.velocity.z);
+            rdb.AddForce(-velocityWoY * 500);
+        }
+        else
+        {
+            wing.transform.localRotation = Quaternion.Euler(wing.transform.localRotation.eulerAngles.x, 0, rdb.angularVelocity.y * -15);
+
+            //transform.forward = Vector3.Lerp(transform.forward, direction, Time.fixedDeltaTime );
+
+            
+
+        }
 
         if(Physics.Raycast(transform.position+ Vector3.up*.5f, Vector3.down,out RaycastHit hit, 65279))
         {
             anim.SetFloat("GroundDistance", hit.distance);
+            if (state != States.fly&& wingtryactivate && hit.distance > 1.5f)
+            {
+                StartCoroutine(Fly());
+            }
         }
 
     }
@@ -79,6 +100,7 @@ public class TrdWalk : MonoBehaviour
         {
             StartCoroutine(Attack());
         }
+        wingtryactivate = Input.GetButtonDown("Jump");
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -170,9 +192,50 @@ public class TrdWalk : MonoBehaviour
             if (jumptime < 0)
             {
                 StartCoroutine(Idle());
-            }    
+            }
+           
             yield return new WaitForFixedUpdate();
         }
+        //saida do estado
+    }
+
+
+    IEnumerator Fly()
+    {
+        //equivalente ao Start 
+        state = States.fly;
+        wing.SetActive(true);
+        rdb.drag = 0.9f;
+
+        rdb.constraints = RigidbodyConstraints.None;
+        //
+        while (state == States.fly)
+        {
+            //equivalente ao update
+           
+            rdb.AddForce(transform.forward * 500);
+            float flyforce = transform.InverseTransformDirection(rdb.velocity).z;
+
+            rdb.AddForce(transform.up * 100*flyforce);
+            anim.SetFloat("Velocity", rdb.velocity.magnitude);
+
+            rdb.AddRelativeTorque(Vector3.forward * Input.GetAxis("Horizontal") * -1);
+            rdb.AddRelativeTorque(Vector3.up * Input.GetAxis("Horizontal") * 1);
+            rdb.AddRelativeTorque(Vector3.right * Input.GetAxis("Vertical") * 1);
+
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 65279))
+            {
+                if (hit.distance < 1.5f)
+                {
+                   StartCoroutine(Idle());
+                }
+            }
+            //
+            yield return new WaitForEndOfFrame();
+        }
+        rdb.constraints = RigidbodyConstraints.FreezeRotation;
+        wing.SetActive(false);
+        rdb.drag = 0f;
         //saida do estado
     }
 
@@ -193,6 +256,13 @@ public class TrdWalk : MonoBehaviour
                     anim.SetIKPosition(AvatarIKGoal.RightHand, hit.point + transform.right * 0.2f);
                 }
             }
+
+            if (state == States.fly)
+            {
+                anim.SetIKPosition(AvatarIKGoal.LeftHand, handl.position);
+                anim.SetIKPosition(AvatarIKGoal.RightHand, handr.position);
+            }
+
         }
 
         if (objectToLook)
@@ -203,4 +273,5 @@ public class TrdWalk : MonoBehaviour
         }
         
     }
+
 }
