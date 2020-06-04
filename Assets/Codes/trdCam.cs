@@ -31,10 +31,11 @@ public class trdCam : MonoBehaviour
         float distancetohit=10;// distancia pra armazenar
        
         //raycast pra testar a colisao atraz da camera
-        if (Physics.Raycast(player.transform.position + ajustlook, dirback, out RaycastHit hit, 10, 65279))
+        if (Physics.Raycast(player.transform.position + ajustlook, dirback, out RaycastHit hit, 10, 258))
         {
             distancetohit= hit.distance; 
             Debug.DrawLine(player.transform.position + ajustlook, hit.point);
+            print(hit.collider.name);
         }
         //vetor de distanciamento
         Vector3 backvector = (fakeObject.transform.forward * ajust.z);

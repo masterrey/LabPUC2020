@@ -36,6 +36,8 @@ public class TrdWalk : MonoBehaviour
     public bool wingtryactivate = false;
 
     public Transform handl, handr;
+
+    public ItemGrabber itengrab;
     // Start is called before the first frame update
     void Start()
     {
@@ -84,9 +86,10 @@ public class TrdWalk : MonoBehaviour
 
         }
 
-        if(Physics.Raycast(transform.position+ Vector3.up*.5f, Vector3.down,out RaycastHit hit, 65279))
+        if(Physics.Raycast(transform.position+ transform.up*.5f, Vector3.down,out RaycastHit hit, 65279))
         {
             anim.SetFloat("GroundDistance", hit.distance);
+           // print(hit.collider.name);
             if (state != States.fly&& wingtryactivate && hit.distance > 1.5f)
             {
                 StartCoroutine(Fly());
@@ -101,8 +104,7 @@ public class TrdWalk : MonoBehaviour
             StartCoroutine(Attack());
         }
         wingtryactivate = Input.GetButtonDown("Jump");
-
-        if (Input.GetButtonDown("Jump"))
+        if (wingtryactivate)
         {
             StartCoroutine(Jump());
         }
@@ -206,7 +208,7 @@ public class TrdWalk : MonoBehaviour
         state = States.fly;
         wing.SetActive(true);
         rdb.drag = 0.9f;
-
+        itengrab.weaponOnHand.SetActive(false);
         rdb.constraints = RigidbodyConstraints.None;
         //
         while (state == States.fly)
@@ -214,14 +216,15 @@ public class TrdWalk : MonoBehaviour
             //equivalente ao update
            
             rdb.AddForce(transform.forward * 500);
+
             float flyforce = transform.InverseTransformDirection(rdb.velocity).z;
+            rdb.AddForce(transform.up * 80*flyforce);
 
-            rdb.AddForce(transform.up * 100*flyforce);
             anim.SetFloat("Velocity", rdb.velocity.magnitude);
-
             rdb.AddRelativeTorque(Vector3.forward * Input.GetAxis("Horizontal") * -1);
             rdb.AddRelativeTorque(Vector3.up * Input.GetAxis("Horizontal") * 1);
             rdb.AddRelativeTorque(Vector3.right * Input.GetAxis("Vertical") * 1);
+            //sai do voo quando chao ta perto
 
             if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 65279))
             {
@@ -230,11 +233,12 @@ public class TrdWalk : MonoBehaviour
                    StartCoroutine(Idle());
                 }
             }
-            //
-            yield return new WaitForEndOfFrame();
+            //fixed update para coisas da fisica
+            yield return new WaitForFixedUpdate();
         }
         rdb.constraints = RigidbodyConstraints.FreezeRotation;
         wing.SetActive(false);
+        itengrab.weaponOnHand.SetActive(true);
         rdb.drag = 0f;
         //saida do estado
     }
@@ -267,6 +271,10 @@ public class TrdWalk : MonoBehaviour
 
         if (objectToLook)
         {
+            if (Vector3.Distance(objectToLook.transform.position, transform.position) > 20)
+            {
+                objectToLook = null;
+            }
             anim.SetLookAtWeight(1);
             lookposition = Vector3.Lerp(lookposition, objectToLook.transform.position, Time.deltaTime*10);
             anim.SetLookAtPosition(lookposition+Vector3.up*.5f);

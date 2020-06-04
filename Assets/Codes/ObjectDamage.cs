@@ -29,6 +29,7 @@ public class ObjectDamage : MonoBehaviour
         int blinks = 6;
         while (blinks > 0)
         {
+            if(render)
             render.enabled = !render.enabled;
             yield return new WaitForSeconds(0.1f);
             blinks--;

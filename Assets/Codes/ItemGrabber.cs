@@ -46,7 +46,7 @@ public class ItemGrabber : MonoBehaviour
                if(other.gameObject.name == myobjs[i].name)
                 {
                     CommomStatus.weapononhand = i;
-                    print("arma"+ i);
+                    //print("arma"+ i);
                 }
             }
 
