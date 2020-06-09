@@ -33,6 +33,11 @@ public class DamageControl : MonoBehaviour
             lifes--;
             iawalk.currentState = IAWalk.IaState.Damage;
         }
+        if (collision.collider.CompareTag("WeaponDroped"))
+        {
+            lifes--;
+            iawalk.currentState = IAWalk.IaState.Damage;
+        }
         if (lifes < 0)
         {
             iawalk.currentState = IAWalk.IaState.Dying;

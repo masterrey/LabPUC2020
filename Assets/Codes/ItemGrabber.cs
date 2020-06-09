@@ -7,6 +7,8 @@ public class ItemGrabber : MonoBehaviour
     public GameObject weaponOnHand; 
     public Transform handposition;
     public GameObject[] myobjs;
+    public AudioSource audioS;
+    public AudioClip[] audios;
     private void Start()
     {
         if (CommomStatus.weapononhand > -1)
@@ -25,20 +27,23 @@ public class ItemGrabber : MonoBehaviour
        
         if (other.CompareTag("WeaponDroped"))
         {
+            audioS.PlayOneShot(audios[0]);
             //dropa a arma se tem uma na mao
             if (weaponOnHand)
             {
                 weaponOnHand.transform.parent = null;
                 weaponOnHand.GetComponent<Rigidbody>().isKinematic = false;
-                weaponOnHand.transform.Translate(-transform.up);
+                weaponOnHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                 weaponOnHand.transform.Translate(-transform.up);
                 weaponOnHand.layer = 0;
-                
+                audioS.PlayOneShot(audios[1]);
             }
 
             weaponOnHand = other.gameObject;
             other.transform.parent = handposition; //coloca como filho da mao
             other.transform.localPosition = Vector3.zero;//vai pra posicao da mao
-            weaponOnHand.GetComponent<Rigidbody>().isKinematic = true;//desativa o rigidbody
+            // weaponOnHand.GetComponent<Rigidbody>().isKinematic = true;//desativa o rigidbody
+            weaponOnHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             other.transform.localRotation = Quaternion.identity;//reseta a rotacao
             other.transform.gameObject.layer = transform.gameObject.layer;
 

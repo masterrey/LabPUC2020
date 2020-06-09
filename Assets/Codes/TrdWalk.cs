@@ -38,6 +38,9 @@ public class TrdWalk : MonoBehaviour
     public Transform handl, handr;
 
     public ItemGrabber itengrab;
+
+    public AudioSource voicefx;
+    public AudioClip[] voices;
     // Start is called before the first frame update
     void Start()
     {
@@ -164,6 +167,7 @@ public class TrdWalk : MonoBehaviour
         //equivalente ao Start 
         state = States.attack;
         anim.SetTrigger("Attack");
+        voicefx.PlayOneShot(voices[Random.Range(0,3)]);
         yield return new WaitForSeconds(.5f);
         //saida do estado
         StartCoroutine(Idle());
@@ -175,6 +179,7 @@ public class TrdWalk : MonoBehaviour
         //equivalente ao Start 
         state = States.jump;
         jumptime = 0.5f;
+        voicefx.PlayOneShot(voices[Random.Range(3, 5)]);
         //checa se esta no chao
         if (Physics.Raycast(transform.position + Vector3.up * .5f, Vector3.down, out RaycastHit hit, 65279))
         {
@@ -208,8 +213,10 @@ public class TrdWalk : MonoBehaviour
         state = States.fly;
         wing.SetActive(true);
         rdb.drag = 0.9f;
+        if(itengrab.weaponOnHand)
         itengrab.weaponOnHand.SetActive(false);
         rdb.constraints = RigidbodyConstraints.None;
+        voicefx.PlayOneShot(voices[8]);
         //
         while (state == States.fly)
         {
