@@ -274,6 +274,7 @@ public class TrdWalk : MonoBehaviour
             if (Vector3.Distance(objectToLook.transform.position, transform.position) > 20)
             {
                 objectToLook = null;
+                return;
             }
             anim.SetLookAtWeight(1);
             lookposition = Vector3.Lerp(lookposition, objectToLook.transform.position, Time.deltaTime*10);

@@ -15,16 +15,23 @@ public class Srine : MonoBehaviour
             
             if (backtoworld)
             {
-                SceneManager.LoadScene("MainScene");
+                StartCoroutine(MyLoadScene("MainScene"));
 
             }
             else
             {
                 CommomStatus.lastPosition = other.transform.position-Vector3.forward*2;
-                SceneManager.LoadScene(srinetoload);
+                StartCoroutine(MyLoadScene(srinetoload));
             }
             
         }
        
+    }
+
+    IEnumerator MyLoadScene(string load)
+    {
+        Camera.main.SendMessage("CallFadeOut");
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(load);
     }
 }
