@@ -7,18 +7,7 @@ public class DamageControl : MonoBehaviour
 {
     public int lifes = 3;
     public IAWalk iawalk;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+  
     public void GetDamage()
     {
         iawalk.currentState = IAWalk.IaState.Dying;
