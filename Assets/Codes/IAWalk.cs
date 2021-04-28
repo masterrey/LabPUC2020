@@ -83,7 +83,8 @@ public class IAWalk : MonoBehaviour
     {
         agent.isStopped = true;
         anim.SetBool("Attack", false);
-        if (Vector3.Distance(transform.position, target.transform.position) > 5)
+
+        if (target && Vector3.Distance(transform.position, target.transform.position) > 5)
         {
             currentState = IaState.Patrol;
         }
